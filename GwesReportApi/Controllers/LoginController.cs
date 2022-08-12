@@ -13,6 +13,8 @@ using GwesReportApi.Helpers;
 using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
+using System.Net.Http;
 
 namespace GwesReportApi.Controllers
 {
@@ -43,8 +45,10 @@ namespace GwesReportApi.Controllers
                 var tokenString = GenerateJSONWebToken(user);
                 response = Ok(new { token = tokenString });
             }
-
+            
             return response;
+            
+            
         }
 
         private string GenerateJSONWebToken(UserModel userInfo)
@@ -97,17 +101,26 @@ namespace GwesReportApi.Controllers
 
                 
                 user = new UserModel();
+                
                 foreach (var item in users)
                 {
-                    user.Username = item.Username;
-                    user.Password = item.Password;
+                    if (item.Username==null)
+                    { users = null; }
+                    else { 
+                    try
+                    {
+                        user.Username = item.Username;
+                        user.Password = item.Password;
+                    }
+                    catch { users = null; }
+                    }
 
                 }
                 
             }
-            catch (Exception authenticationException)
+            catch 
             {
-                user = new UserModel { Username = "Error:"+authenticationException.Message, Password="Exception:"+authenticationException.StackTrace.ToString() };
+                user = null;
             }
                                        
            
