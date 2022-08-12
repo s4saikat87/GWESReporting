@@ -62,9 +62,7 @@ namespace GwesReportApi
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            
             app.UseAuthentication();
-            
             app.UseRouting();
             app.UseAuthorization();
             app.UseCors(x => x
